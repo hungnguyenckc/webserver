@@ -1,18 +1,14 @@
 #!/bin/bash
 echo "Restoring database..."
 
-name="beer_fridge"
-path="./../www/beer-fridge/redgit/sql/"
+dbname=$1
+sitename=$2
+path=$3
 
-docker exec mysql mysql -uroot -proot -e "DROP DATABASE ${name}"
-docker exec mysql mysql -uroot -proot -e "CREATE DATABASE ${name}"
+docker exec db mysql -uroot -proot -e "DROP DATABASE ${dbname}"
+docker exec db mysql -uroot -proot -e "CREATE DATABASE ${dbname}"
 
-#Linux
-#docker exec -i mysql mysql -uroot -proot --default-character-set=utf8  ${name} < ${path}/ ${name}_structure.sql
-#docker exec mysql mysql -uroot -proot --default-character-set=utf8  ${name} < ${path}/ ${name}_data.sql
-
-#Windows
-cat ${path}/beer_fridge_structure.sql | docker exec -i mysql mysql -uroot -proot --default-character-set=utf8 $name
-cat ${path}/beer_fridge_data.sql | docker exec -i mysql mysql -uroot -proot --default-character-set=utf8 $name
+docker exec -i db mysql -uroot -proot --default-character-set=utf8 ${dbname} < ${path}/${sitename}_structure.sql
+docker exec -i db mysql -uroot -proot --default-character-set=utf8 ${dbname} < ${path}/${sitename}_data.sql
 
 echo "Done."

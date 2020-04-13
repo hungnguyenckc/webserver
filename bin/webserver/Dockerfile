@@ -4,9 +4,19 @@
 FROM php:7.2-apache-stretch
 
 ARG APCU_VERSION=5.1.18
+ARG USERNAME=lu
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
+
+ENV APACHE_RUN_USER $USERNAME
+ENV APACHE_RUN_GROUP $USERNAME
 
 RUN apt-get -y update --fix-missing --no-install-recommends
 RUN apt-get -y upgrade
@@ -58,6 +68,7 @@ RUN docker-php-ext-install zip
 RUN docker-php-ext-install -j$(nproc) intl
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install gettext
+RUN docker-php-ext-install exif
 
 # Enable apache modules
 RUN a2enmod rewrite headers
@@ -66,6 +77,6 @@ RUN a2enmod rewrite headers
 RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-
+    
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
