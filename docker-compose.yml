@@ -6,8 +6,7 @@ services:
       context: ./bin/webserver
     container_name: 'webserver'
     depends_on:
-      - db
-      - phpmyadmin
+      - mysql
     ports:
       - "80:80"
       - "443:443"
@@ -17,9 +16,9 @@ services:
       - ./config/vhosts:/etc/apache2/sites-enabled
       - ./logs/apache2:/var/log/apache2
     restart: always
-  db:
+  mysql:
     image: mysql:5.7
-    container_name: 'db'
+    container_name: 'mysql'
     ports:
       - "3306:3306"
     expose:
@@ -35,12 +34,13 @@ services:
     container_name: 'phpmyadmin'
     restart: always
     environment:
-      PMA_HOST: db
+      PMA_HOST: mysql
       PMA_PORT: 3306
     ports:
       - '8080:80'
-    links:
-      - db
+    depends_on:
+      - mysql
+      - webserver
     volumes: 
       - /sessions
   
