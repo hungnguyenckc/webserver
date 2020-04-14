@@ -4,8 +4,8 @@
 FROM php:7.2-apache-stretch
 
 ARG APCU_VERSION=5.1.18
-ARG USERNAME=lu
-ARG USER_UID=1000
+ARG USERNAME
+ARG USER_UID
 ARG USER_GID=$USER_UID
 
 # Create a non-root user to use if preferred
@@ -70,6 +70,6 @@ RUN a2enmod rewrite headers
 RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-    
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
