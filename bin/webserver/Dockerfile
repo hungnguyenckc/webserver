@@ -8,7 +8,7 @@ ARG USERNAME=lu
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
+# Create a non-root user to use if preferred
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME
 
@@ -21,19 +21,12 @@ ENV APACHE_RUN_GROUP $USERNAME
 RUN apt-get -y update --fix-missing --no-install-recommends
 RUN apt-get -y upgrade
 
-# Install useful tools
-RUN apt-get -yq install apt-utils nano wget dialog
-
 # Install important libraries
 RUN apt-get -y install --fix-missing \
-    git curl zip \
-    apt-utils build-essential libcurl3 libcurl3-dev openssl \
+    libcurl3 libcurl3-dev openssl \
     libxml2-dev zlib1g-dev libicu-dev \
     libsqlite3-dev libsqlite3-0 mysql-client \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install MySQL
 RUN docker-php-ext-install pdo_mysql 
