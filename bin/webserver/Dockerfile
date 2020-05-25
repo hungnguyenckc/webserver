@@ -26,7 +26,7 @@ RUN apt-get -y install --fix-missing \
     libcurl3 libcurl3-dev openssl \
     libxml2-dev zlib1g-dev libicu-dev \
     libsqlite3-dev libsqlite3-0 mysql-client \
-    libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+    libfreetype6-dev libjpeg62-turbo-dev libpng-dev git
 
 # Install MySQL
 RUN docker-php-ext-install pdo_mysql 
@@ -62,6 +62,14 @@ RUN docker-php-ext-install -j$(nproc) intl
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install gettext
 RUN docker-php-ext-install exif
+
+RUN git clone https://github.com/php/pecl-search_engine-solr.git --depth=1 \
+  && cd pecl-search_engine-solr \
+  && /usr/local/bin/phpize && ./configure && make && make install \
+  && cd .. && rm -rf pecl-search_engine-solr \
+  && apt-get remove --purge -y git \
+  && rm -r /var/lib/apt/lists/* \
+  && docker-php-ext-enable solr
 
 # Enable apache modules
 RUN a2enmod rewrite headers

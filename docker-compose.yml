@@ -18,6 +18,7 @@ services:
       - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini
       - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled
       - ${LOG_DIR-./logs/apache2}:/var/log/apache2
+      - ${SOLR_DIR-./data/solr}:/var/solr/data
     restart: always
   mysql:
     image: mysql:5.7
@@ -45,4 +46,14 @@ services:
     volumes: 
       - /sessions
       - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
-  
+  solr:
+    image: solr
+    container_name: 'solr'
+    restart: always
+    ports:
+      - "8983:8983"
+    volumes: 
+        - ${SOLR_DIR-./data/solr}:/var/solr/data
+    command:
+      - solr-precreate
+      - gettingstarted
