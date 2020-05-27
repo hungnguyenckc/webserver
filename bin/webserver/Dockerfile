@@ -26,7 +26,8 @@ RUN apt-get -y install --fix-missing \
     libcurl3 libcurl3-dev openssl \
     libxml2-dev zlib1g-dev libicu-dev \
     libsqlite3-dev libsqlite3-0 mysql-client \
-    libfreetype6-dev libjpeg62-turbo-dev libpng-dev git
+    libfreetype6-dev libjpeg62-turbo-dev libpng-dev git \
+    libmemcached-dev
 
 # Install MySQL
 RUN docker-php-ext-install pdo_mysql 
@@ -73,6 +74,9 @@ RUN git clone https://github.com/php/pecl-search_engine-solr.git --depth=1 \
 
 # Enable apache modules
 RUN a2enmod rewrite headers
+
+RUN pecl install memcached
+RUN docker-php-ext-enable memcached
 
 # Clean up
 RUN apt-get autoremove -y \
