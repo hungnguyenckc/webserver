@@ -46,19 +46,6 @@ services:
     volumes: 
       - /sessions
       - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
-  solr:
-    image: solr:latest
-    container_name: 'solr'
-    restart: always
-    ports:
-      - "8983:8983"
-    volumes: 
-        - ${SOLR_DIR-./data/solr}:/home/${USERNAME}/server/solr
-    command:
-      - solr-precreate
-      - gettingstarted
-    environment:
-      SOLR_HOME: /home/${USERNAME}/server/solr
   memcached:
     image: memcached
     container_name: 'memcached'
