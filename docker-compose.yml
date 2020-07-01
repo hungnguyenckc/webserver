@@ -19,10 +19,13 @@ services:
       - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled
       - ${LOG_DIR-./logs/apache2}:/var/log/apache2
       - ${SOLR_DIR-./data/solr}:/home/${USERNAME}/server/solr
+    environment:
+      XDEBUG_CONFIG: "remote_enable=1, remote_host=172.17.0.1"
     restart: always
   mysql:
     image: mysql:5.7
     container_name: 'mysql'
+    command: mysqld --sql_mode=""
     ports:
       - "127.0.0.1:${HOST_MACHINE_MYSQL_PORT}:3306"
     volumes: 
