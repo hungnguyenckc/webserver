@@ -65,7 +65,7 @@ RUN docker-php-ext-install gettext
 RUN docker-php-ext-install exif
 
 # Enable apache modules
-RUN a2enmod rewrite headers
+RUN a2enmod rewrite headers vhost_alias
 
 RUN pecl install memcached
 RUN docker-php-ext-enable memcached
