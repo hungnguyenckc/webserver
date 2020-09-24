@@ -1,7 +1,4 @@
-#Quickfix - Basebox for PHP7.2 Library now uses Debian "10" Buster, superceeding #libcurl3, stretch is most compatible at this time whilst devs workout backport.
-#https://github.com/docker-library/official-images/blob/master/library/php
-
-FROM php:7.2-apache-stretch
+FROM php:7.4-apache
 
 ARG APCU_VERSION=5.1.18
 ARG USERNAME
@@ -23,11 +20,11 @@ RUN apt-get -y upgrade
 
 # Install important libraries
 RUN apt-get -y install --fix-missing \
-    libcurl3 libcurl3-dev openssl \
+    libcurl3-dev openssl \
     libxml2-dev zlib1g-dev libicu-dev \
-    libsqlite3-dev libsqlite3-0 mysql-client \
+    libsqlite3-dev libsqlite3-0 \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev git \
-    libmemcached-dev libzip-dev
+    libmemcached-dev libzip-dev libwebp-dev libonig-dev
 
 # Install MySQL
 RUN docker-php-ext-install pdo_mysql 
@@ -35,7 +32,7 @@ RUN docker-php-ext-install pdo_sqlite
 RUN docker-php-ext-install mysqli
 
 # Install GD
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ 
+RUN docker-php-ext-configure gd --with-webp --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
 
 # Install xdebug
@@ -44,7 +41,6 @@ RUN docker-php-ext-enable xdebug
 
 # Install SOAP
 RUN docker-php-ext-install soap
-RUN docker-php-ext-enable soap
 
 # Install opcache
 RUN docker-php-ext-install opcache
@@ -60,7 +56,6 @@ RUN docker-php-ext-install tokenizer
 RUN docker-php-ext-install json
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install -j$(nproc) intl
-RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install gettext
 RUN docker-php-ext-install exif
 
@@ -69,6 +64,8 @@ RUN a2enmod rewrite headers vhost_alias
 
 RUN pecl install memcached
 RUN docker-php-ext-enable memcached
+
+RUN service apache2 restart
 
 # Clean up
 RUN apt-get autoremove -y \
