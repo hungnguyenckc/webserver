@@ -26,6 +26,9 @@ RUN apt-get -y install --fix-missing \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev git \
     libmemcached-dev libzip-dev libwebp-dev libonig-dev
 
+# Install node.js
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get update && apt-get install -y nodejs && npm install npm@latest -g
+
 # Install MySQL
 RUN docker-php-ext-install pdo_mysql 
 RUN docker-php-ext-install pdo_sqlite
