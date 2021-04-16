@@ -1,9 +1,13 @@
+FROM composer/composer as composer
+
 FROM php:7.4-apache
 
 ARG APCU_VERSION=5.1.18
 ARG USERNAME
 ARG USER_UID
 ARG USER_GID=$USER_UID
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Create a non-root user to use if preferred
 RUN groupadd --gid $USER_GID $USERNAME \

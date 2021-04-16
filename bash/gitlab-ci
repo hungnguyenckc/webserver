@@ -1,0 +1,1 @@
+docker exec -it -w $PWD gitlab-runner gitlab-runner exec docker test --docker-volumes "/home/lu/.ssh/id_rsa:/root/.ssh/id_rsa:ro"
