@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  webserver:
+    volumes:
+      - web-sync:/var/www/html:cached
+ 
+volumes:
+  web-sync:
+    external: true

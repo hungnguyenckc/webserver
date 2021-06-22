@@ -1,5 +1,3 @@
-FROM composer/composer as composer
-
 FROM php:7.4-apache
 
 ARG APCU_VERSION=5.1.18
@@ -7,7 +5,6 @@ ARG USERNAME
 ARG USER_UID
 ARG USER_GID=$USER_UID
 
-COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Create a non-root user to use if preferred
 RUN groupadd --gid $USER_GID $USERNAME \
@@ -29,9 +26,6 @@ RUN apt-get -y install --fix-missing \
     libsqlite3-dev libsqlite3-0 \
     libfreetype6-dev libjpeg62-turbo-dev libpng-dev git \
     libmemcached-dev libzip-dev libwebp-dev libonig-dev
-
-# Install node.js
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get update && apt-get install -y nodejs && npm install npm@latest -g
 
 # Install MySQL
 RUN docker-php-ext-install pdo_mysql 
