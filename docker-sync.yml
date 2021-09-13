@@ -1,7 +1,7 @@
 version: "2"
 options:
   compose-file-path: './docker-compose.yml'
-  compose-dev-file-path: './docker-compose-mac.yml'
+  compose-dev-file-path: './docker-compose-sync.yml'
   verbose: true # make the whole sync verbose
 syncs:
   web-sync:

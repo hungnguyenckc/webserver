@@ -1,20 +1,7 @@
 FROM php:7.4-apache
 
-ARG APCU_VERSION=5.1.18
-ARG USERNAME
-ARG USER_UID
-ARG USER_GID=$USER_UID
-
-
-# Create a non-root user to use if preferred
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME
-
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
-
-ENV APACHE_RUN_USER $USERNAME
-ENV APACHE_RUN_GROUP $USERNAME
 
 RUN apt-get -y update --fix-missing --no-install-recommends
 RUN apt-get -y upgrade
@@ -28,7 +15,7 @@ RUN apt-get -y install --fix-missing \
     libmemcached-dev libzip-dev libwebp-dev libonig-dev
 
 # Install MySQL
-RUN docker-php-ext-install pdo_mysql 
+RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install pdo_sqlite
 RUN docker-php-ext-install mysqli
 
@@ -43,14 +30,6 @@ RUN docker-php-ext-enable xdebug
 # Install SOAP
 RUN docker-php-ext-install soap
 
-# Install opcache
-RUN docker-php-ext-install opcache
-RUN docker-php-ext-configure opcache --enable-opcache
-
-# Install APCU
-RUN pecl install apcu-${APCU_VERSION} 
-RUN docker-php-ext-enable apcu
-
 # Other PHP7 Extensions
 RUN docker-php-ext-install curl
 RUN docker-php-ext-install tokenizer
@@ -63,9 +42,6 @@ RUN docker-php-ext-install exif
 # Enable apache modules
 RUN a2enmod rewrite headers vhost_alias
 
-RUN pecl install memcached
-RUN docker-php-ext-enable memcached
-
 RUN service apache2 restart
 
 # Clean up
@@ -75,3 +51,5 @@ RUN apt-get autoremove -y \
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
+
+USER www-data
