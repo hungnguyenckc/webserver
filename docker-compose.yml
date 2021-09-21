@@ -14,16 +14,14 @@ services:
       - ${DOCUMENT_ROOT-./www}:/var/www/html
       - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini
       - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled
-      - ${LOG_DIR-./logs/apache2}:/var/log/apache2
     restart: unless-stopped
 
     networks:
       - web-network
 
   mysql:
-    image: mysql:5.7
+    image: mariadb:10.5
     container_name: 'mysql'
-    platform: 'linux/amd64'
     command: mysqld --sql_mode="" --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - "${HOST_MACHINE_MYSQL_PORT}:3306"
