@@ -1,3 +1,5 @@
+# docker-sync for Mac and Windows docker performance https://docker-sync.readthedocs.io/
+
 version: '3'
 
 services:

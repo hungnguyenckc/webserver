@@ -6,15 +6,10 @@ options:
 syncs:
   web-sync:
     notify_terminal: true
-    unison_image: "eugenmayer/unison:2.51.3-4.12.0-ARM64"
+    # Uncomment on Apple Silicon
+    #unison_image: "eugenmayer/unison:2.51.3-4.12.0-ARM64"
     src: "./www"
     watch_args: '-v'
     sync_strategy: 'unison'
-    sync_userid: '1000'
-    sync_args:
-      - "-ignore='Path .idea'" # no need to send PHPStorm config to container
-      - "-ignore='Path .git'" # ignore the main .git repo
-      - "-ignore='Path .vscode'" # ignore the main .git repo
-      - "-ignore='BelowPath .git'" # also ignore .git repos in subfolders such as in composer vendor dirs
-      - "-ignore='BelowPath tmp'" # also ignore .git repos in subfolders such as in composer vendor dirs
-      - "-ignore='BelowPath redgit'" # also ignore .git repos in subfolders such as in composer vendor dirs
+    sync_userid: '33'
+    sync_excludes: ['.idea', '.git', '.gitignore', 'tmp', '.vscode', 'redgit', '.jch', '.sql']
